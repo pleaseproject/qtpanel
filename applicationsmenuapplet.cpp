@@ -1,14 +1,22 @@
 #include "applicationsmenuapplet.h"
 
+#if QT_VERSION >= 0x050000
+#include <QMenu>                                                             
+#include <QStyle>                                                            
+#include <QPixmap>                                                           
+#include <QGraphicsScene>
+#else
 #include <QtGui/QMenu>
 #include <QtGui/QStyle>
 #include <QtGui/QPixmap>
 #include <QtGui/QGraphicsScene>
+#endif
 #include "textgraphicsitem.h"
 #include "panelwindow.h"
 #include "desktopapplications.h"
 #include "dpisupport.h"
 
+#if QT_VERSION < 0x050000
 int ApplicationsMenuStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const
 {
 	if(metric == QStyle::PM_SmallIconSize)
@@ -16,6 +24,7 @@ int ApplicationsMenuStyle::pixelMetric(PixelMetric metric, const QStyleOption* o
 	else
 		return QPlastiqueStyle::pixelMetric(metric, option, widget);
 }
+#endif
 
 SubMenu::SubMenu(QMenu* parent, const QString& title, const QString& category, const QString& icon)
 {
@@ -38,7 +47,11 @@ ApplicationsMenuApplet::ApplicationsMenuApplet(PanelWindow* panelWindow)
 	: Applet(panelWindow), m_menuOpened(false)
 {
 	m_menu = new QMenu();
-	m_menu->setStyle(&m_style);
+#if QT_VERSION >= 0x050000
+    m_menu->setStyle(QStyleFactory::create("Fusion"));
+#else
+    m_menu->setStyle(&m_style);
+#endif
 	m_menu->setFont(m_panelWindow->font());
 	m_menu->setStyleSheet(QString().sprintf(menuStyleSheet,
 		adjustHardcodedPixelSize(36),

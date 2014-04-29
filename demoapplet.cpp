@@ -1,7 +1,12 @@
 #include "demoapplet.h"
 
+#if QT_VERSION >= 0x050000
+#include <QGraphicsScene>
+#include <QGraphicsRectItem>
+#else
 #include <QtGui/QGraphicsScene>
 #include <QtGui/QGraphicsRectItem>
+#endif
 #include "panelwindow.h"
 
 DemoApplet::DemoApplet(PanelWindow* panelWindow)

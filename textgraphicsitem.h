@@ -3,7 +3,11 @@
 
 #include <QtGui/QColor>
 #include <QtGui/QFont>
+#if QT_VERSION >= 0x050000
+#include <QGraphicsItem>
+#else
 #include <QtGui/QGraphicsItem>
+#endif
 
 class TextGraphicsItem: public QGraphicsItem
 {

@@ -6,6 +6,16 @@
 #include <QtCore/QObject>
 #include <QtGui/QIcon>
 #include <QtGui/QPixmap>
+#if QT_VERSION >= 0x050000                                                         
+#include <QApplication>                                                            
+#include <QX11Info>                                                                
+#else                                                                              
+#include <QtGui/QApplication>                                                      
+#include <QtGui/QX11Info>                                                          
+#include <QtGui/QImage>                                                            
+#endif
+
+#include <X11/Xlib.h>
 
 class X11Support: public QObject
 {

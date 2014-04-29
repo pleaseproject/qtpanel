@@ -1,20 +1,30 @@
 #include "panelwindow.h"
 
 #include <QtGui/QResizeEvent>
+#if QT_VERSION >= 0x050000
+#include <QApplication>                                                   
+#include <QDesktopWidget>                                                    
+#include <QGraphicsScene>                                                    
+#include <QGraphicsSceneMouseEvent>                                          
+#include <QGraphicsView>                                                     
+#include <QMenu>
+#else
 #include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QGraphicsScene>
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QGraphicsView>
 #include <QtGui/QMenu>
-#include "x11support.h"
+#endif
+#include "dockapplet.h"
+
 #include "dpisupport.h"
 #include "panelapplication.h"
 
 #include "applicationsmenuapplet.h"
-#include "dockapplet.h"
 #include "trayapplet.h"
 #include "clockapplet.h"
+#include "x11support.h"
 
 PanelWindowGraphicsItem::PanelWindowGraphicsItem(PanelWindow* panelWindow)
 	: m_panelWindow(panelWindow)

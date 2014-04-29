@@ -4,7 +4,11 @@
 #include <QtCore/QObject>
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
+#if QT_VERSION >= 0x050000
+#include <QGraphicsItem>
+#else
 #include <QtGui/QGraphicsItem>
+#endif
 
 class PanelWindow;
 

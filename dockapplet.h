@@ -4,7 +4,11 @@
 #include <QtCore/QVector>
 #include <QtCore/QMap>
 #include <QtGui/QIcon>
+#if QT_VERSION >= 0x050000
+#include <QGraphicsItem>
+#else
 #include <QtGui/QGraphicsItem>
+#endif
 #include "applet.h"
 
 class QGraphicsPixmapItem;

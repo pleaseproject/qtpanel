@@ -2,7 +2,11 @@
 
 #include <QtCore/QTimer>
 #include <QtCore/QDateTime>
+#if QT_VERSION >= 0x050000
+#include <QGraphicsScene>
+#else
 #include <QtGui/QGraphicsScene>
+#endif
 #include "textgraphicsitem.h"
 #include "panelwindow.h"
 

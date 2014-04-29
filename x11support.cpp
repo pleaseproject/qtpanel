@@ -1,11 +1,6 @@
 #include "x11support.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QX11Info>
-#include <QtGui/QImage>
-
 // Keep all the X11 stuff with scary defines below normal headers.
-#include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <X11/extensions/Xcomposite.h>
@@ -352,7 +347,11 @@ void X11Support::unredirectWindow(unsigned long window)
 
 QPixmap X11Support::getWindowPixmap(unsigned long window)
 {
-	return QPixmap::fromX11Pixmap(XCompositeNameWindowPixmap(QX11Info::display(), window));
+#if QT_VERSION >= 0x050000
+    return QPixmap();
+#else
+    return QPixmap::fromX11Pixmap(XCompositeNameWindowPixmap(QX11Info::display(), window));
+#endif
 }
 
 void X11Support::resizeWindow(unsigned long window, int width, int height)

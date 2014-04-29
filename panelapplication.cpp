@@ -1,13 +1,5 @@
 #include "panelapplication.h"
 
-#include <QtCore/QSettings>
-#include <QtCore/QTimer>
-#include "iconloader.h"
-#include "x11support.h"
-#include "dpisupport.h"
-#include "desktopapplications.h"
-#include "ui_panelapplicationsettings.h"
-
 PanelApplication* PanelApplication::m_instance = NULL;
 
 PanelApplication::PanelApplication(int& argc, char** argv)

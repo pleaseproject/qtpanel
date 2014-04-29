@@ -1,9 +1,21 @@
 #ifndef PANELAPPLICATION_H
 #define PANELAPPLICATION_H
 
+#include <QtCore/QSettings>                                                        
+#include <QtCore/QTimer>
+#include "iconloader.h"                                                            
+#include "dpisupport.h"                                                            
+#include "desktopapplications.h"
+#include "ui_panelapplicationsettings.h"
+#if QT_VERSION >= 0x050000
+#include <QApplication>
+#include <QFont>
+#else
 #include <QtGui/QApplication>
 #include <QtGui/QFont>
+#endif
 #include "panelwindow.h"
+#include "x11support.h"
 
 class IconLoader;
 class X11Support;

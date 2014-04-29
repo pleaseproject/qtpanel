@@ -3,16 +3,23 @@
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
+#if QT_VERSION >= 0x050000
+#include <QAction>
+#include <QStyleFactory>
+#else
 #include <QtGui/QAction>
 #include <QtGui/QPlastiqueStyle>
+#endif
 #include "applet.h"
 
+#if QT_VERSION < 0x050000
 class ApplicationsMenuStyle: public QPlastiqueStyle
 {
 	Q_OBJECT
 public:
 	int pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const;
 };
+#endif
 
 class SubMenu
 {
@@ -62,7 +69,9 @@ private slots:
 	void applicationRemoved(const QString& path);
 
 private:
-	ApplicationsMenuStyle m_style;
+#if QT_VERSION < 0x050000
+    ApplicationsMenuStyle m_style;
+#endif
 	TextGraphicsItem* m_textItem;
 	bool m_menuOpened;
 	QMenu* m_menu;

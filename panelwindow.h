@@ -2,8 +2,13 @@
 #define PANELWINDOW_H
 
 #include <QtCore/QVector>
+#if QT_VERSION >= 0x050000
+#include <QWidget>
+#include <QGraphicsItem>
+#else
 #include <QtGui/QWidget>
 #include <QtGui/QGraphicsItem>
+#endif
 
 class QFont;
 class QGraphicsScene;
