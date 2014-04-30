@@ -504,7 +504,7 @@ QSize DockApplet::desiredSize()
 void DockApplet::registerDockItem(DockItem* dockItem)
 {
 	m_dockItems.append(dockItem);
-	qDebug() << "DEBUG: " << __PRETTY_FUNCTION__ <<  m_dockItems.size();
+	//qDebug() << "DEBUG: " << __PRETTY_FUNCTION__ <<  m_dockItems.size();
     updateLayout();
 	dockItem->moveInstantly();
 }

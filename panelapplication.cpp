@@ -9,12 +9,15 @@ PanelApplication::PanelApplication(int& argc, char** argv)
 
 	m_defaultIconThemeName = QIcon::themeName();
 
-	setOrganizationName("madfish");
+	setOrganizationName("AOSC-Dev");
 	setApplicationName("qtpanel");
 
 	m_iconLoader = new IconLoader();
 	m_x11support = new X11Support();
-	m_desktopApplications = new DesktopApplications();
+#if QT_VERSION >= 0x050000
+	myXEv.setX11Support(m_x11support);
+#endif
+    m_desktopApplications = new DesktopApplications();
 }
 
 PanelApplication::~PanelApplication()
