@@ -11,6 +11,7 @@
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QMenu>
 #endif
+#include <QDebug>
 
 #include "dockapplet.h"
 #include "textgraphicsitem.h"
@@ -403,7 +404,7 @@ void Client::updateUrgency()
 DockApplet::DockApplet(PanelWindow* panelWindow)
 	: Applet(panelWindow), m_dragging(false)
 {
-	// Register for notifications about window property changes.
+    // Register for notifications about window property changes.
 	connect(X11Support::instance(), SIGNAL(windowPropertyChanged(ulong,ulong)), this, SLOT(windowPropertyChanged(ulong,ulong)));
 }
 
@@ -503,7 +504,8 @@ QSize DockApplet::desiredSize()
 void DockApplet::registerDockItem(DockItem* dockItem)
 {
 	m_dockItems.append(dockItem);
-	updateLayout();
+	qDebug() << "DEBUG: " << __PRETTY_FUNCTION__ <<  m_dockItems.size();
+    updateLayout();
 	dockItem->moveInstantly();
 }
 
@@ -566,21 +568,21 @@ void DockApplet::updateActiveWindow()
 
 void DockApplet::windowPropertyChanged(unsigned long window, unsigned long atom)
 {
-	if(window == X11Support::rootWindow())
-	{
-		if(atom == X11Support::atom("_NET_CLIENT_LIST"))
-		{
+    // FIXME: tempoarary Qt5 style...
+#if QT_VERSION >= 0x050000
+    updateClientList();
+#else
+    if (window == X11Support::rootWindow()) {
+        if (atom == X11Support::atom("_NET_CLIENT_LIST")) 
 			updateClientList();
-		}
 
 		if(atom == X11Support::atom("_NET_ACTIVE_WINDOW"))
-		{
 			updateActiveWindow();
-		}
 
 		return;
 	}
 
-	if(m_clients.contains(window))
+	if (m_clients.contains(window))
 		m_clients[window]->windowPropertyChanged(atom);
+#endif
 }

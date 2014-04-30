@@ -1,3 +1,5 @@
+#include <QDebug>
+
 #include "x11support.h"
 
 // TODO: Keep all the X11 stuff with scary defines below normal headers.
@@ -33,7 +35,11 @@ X11Support::~X11Support()
 
 void X11Support::onX11Event(XEvent* event)
 {
-	if(event->type == m_damageEventBase + XDamageNotify)
+    // FIXME: temporary Qt5 style...
+#if QT_VERSION >= 0x050000
+    emit windowPropertyChanged(NULL, NULL);
+#else
+    if (event->type == m_damageEventBase + XDamageNotify)
 	{
 		// Repair damaged area.
 		XDamageNotifyEvent* damageEvent = reinterpret_cast<XDamageNotifyEvent*>(event);
@@ -45,10 +51,11 @@ void X11Support::onX11Event(XEvent* event)
 		emit windowClosed(event->xdestroywindow.window);
 	if(event->type == ConfigureNotify)
 		emit windowReconfigured(event->xconfigure.window, event->xconfigure.x, event->xconfigure.y, event->xconfigure.width, event->xconfigure.height);
-	if(event->type == PropertyNotify)
+	if (event->type == PropertyNotify)
 		emit windowPropertyChanged(event->xproperty.window, event->xproperty.atom);
 	if(event->type == ClientMessage)
 		emit clientMessageReceived(event->xclient.window, event->xclient.message_type, event->xclient.data.b);
+#endif
 }
 
 unsigned long X11Support::rootWindow()

@@ -27,9 +27,11 @@ PanelApplication::~PanelApplication()
 	m_instance = NULL;
 }
 
+// FIXME: there is no x11EventFilter any more for Qt5?
 bool PanelApplication::x11EventFilter(XEvent* event)
 {
-	m_x11support->onX11Event(event);
+	qDebug() << "DEBUG: " << __PRETTY_FUNCTION__;
+    m_x11support->onX11Event(event);
 	return false;
 }
 
@@ -61,7 +63,10 @@ void PanelApplication::reinit()
 
 void PanelApplication::init()
 {
-	QSettings settings;
+#if QT_VERSION >= 0x050000
+    installNativeEventFilter(&myXEv);
+#endif
+    QSettings settings;
 	setFontName(settings.value("fontName", "default").toString());
 	setIconThemeName(settings.value("iconThemeName", "default").toString());
 	QString verticalPosition = settings.value("verticalPosition", "Top").toString();

@@ -6,10 +6,13 @@
 #if QT_VERSION >= 0x050000
 #include <QApplication>
 #include <QFont>
+#include <QAbstractNativeEventFilter>
+#include <xcb/xcb.h>
 #else
 #include <QtGui/QApplication>
 #include <QtGui/QFont>
 #endif
+#include <QDebug>
 
 #include "iconloader.h"                                                            
 #include "dpisupport.h"                                                            
@@ -22,7 +25,30 @@ class IconLoader;
 class X11Support;
 class DesktopApplications;
 
-class PanelApplication: public QApplication
+#if QT_VERSION >= 0x050000                                                         
+class MyXcbEventFilter : public QAbstractNativeEventFilter                         
+{                                                                                  
+public:                   
+    MyXcbEventFilter() :m_x11support(NULL) {}
+
+    virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *) Q_DECL_OVERRIDE
+    {                                                                              
+        xcb_generic_event_t *ev = static_cast<xcb_generic_event_t *>(message);
+        qDebug() << "DEBUG: " << __PRETTY_FUNCTION__ << eventType << message << ev;
+        // FIXME: convert xcb_generic_event_t directly to XEvent
+        // google with Qt5 XEvent to see other projects (such as KWin) HOWTO fix it
+        if (m_x11support) m_x11support->onX11Event(NULL); 
+        return false;                                                              
+    }
+
+    void setX11Support(X11Support *x11support) { m_x11support = x11support; }
+
+private:
+    X11Support *m_x11support;    
+};                                                                                 
+#endif
+
+class PanelApplication: public QApplication 
 {
 	Q_OBJECT
 public:
@@ -33,6 +59,10 @@ public:
 	{
 		return m_instance;
 	}
+
+#if QT_VERSION >= 0x050000
+    MyXcbEventFilter myXEv;
+#endif
 
 	bool x11EventFilter(XEvent* event);
 

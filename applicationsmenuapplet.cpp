@@ -48,7 +48,7 @@ ApplicationsMenuApplet::ApplicationsMenuApplet(PanelWindow* panelWindow)
 {
 	m_menu = new QMenu();
 #if QT_VERSION >= 0x050000
-    m_menu->setStyle(QStyleFactory::create("Fusion"));
+    m_menu->setStyle(QStyleFactory::create("fusion"));
 #else
     m_menu->setStyle(&m_style);
 #endif
