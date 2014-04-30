@@ -3,10 +3,6 @@
 
 #include <QtCore/QSettings>                                                        
 #include <QtCore/QTimer>
-#include "iconloader.h"                                                            
-#include "dpisupport.h"                                                            
-#include "desktopapplications.h"
-#include "ui_panelapplicationsettings.h"
 #if QT_VERSION >= 0x050000
 #include <QApplication>
 #include <QFont>
@@ -14,6 +10,11 @@
 #include <QtGui/QApplication>
 #include <QtGui/QFont>
 #endif
+
+#include "iconloader.h"                                                            
+#include "dpisupport.h"                                                            
+#include "desktopapplications.h"                                                   
+#include "ui_panelapplicationsettings.h"
 #include "panelwindow.h"
 #include "x11support.h"
 

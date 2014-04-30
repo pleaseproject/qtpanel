@@ -1,6 +1,6 @@
 #include "x11support.h"
 
-// Keep all the X11 stuff with scary defines below normal headers.
+// TODO: Keep all the X11 stuff with scary defines below normal headers.
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <X11/extensions/Xcomposite.h>
@@ -345,9 +345,11 @@ void X11Support::unredirectWindow(unsigned long window)
 	XCompositeUnredirectWindow(QX11Info::display(), window, CompositeRedirectManual);
 }
 
+// FIXME: How to convert Pixmap to QPixmap for Qt5?
 QPixmap X11Support::getWindowPixmap(unsigned long window)
 {
 #if QT_VERSION >= 0x050000
+    Pixmap tmp = XCompositeNameWindowPixmap(QX11Info::display(), window);
     return QPixmap();
 #else
     return QPixmap::fromX11Pixmap(XCompositeNameWindowPixmap(QX11Info::display(), window));

@@ -1,11 +1,11 @@
-#include "trayapplet.h"
-
 #include <QtGui/QPainter>
 #if QT_VERSION >= 0x050000
 #include <QGraphicsSceneMouseEvent>
 #else
 #include <QtGui/QGraphicsSceneMouseEvent>
 #endif
+
+#include "trayapplet.h"
 #include "panelapplication.h"
 #include "panelwindow.h"
 #include "x11support.h"

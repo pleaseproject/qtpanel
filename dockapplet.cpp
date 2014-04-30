@@ -1,5 +1,3 @@
-#include "dockapplet.h"
-
 #include <QtCore/QDateTime>
 #include <QtCore/QTimer>
 #include <QtGui/QPainter>
@@ -13,6 +11,8 @@
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QMenu>
 #endif
+
+#include "dockapplet.h"
 #include "textgraphicsitem.h"
 #include "panelapplication.h"
 #include "panelwindow.h"

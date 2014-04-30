@@ -1,14 +1,25 @@
+# QtPanel
+
+Migrated qtpanel to Qt5 by Leslie Zhai <xiang.zhai@i-soft.com.cn>
+
+## ScreenShot
+
+![ScreenShot](https://raw.github.com/xiangzhai/qtpanel/master/snapshot1.png)
+
 ## Build
 
+### Dependence for iSoftLinux, ArchLinux
+
 ```
-mkdir build
-cd build
+sudo pacman -S qt5-x11extras
 ```
 
 ### Qt4
 
 ```
-cmake ..
+mkdir build4
+cd build4
+cmake -DUSE_QT5=OFF ..
 make
 ```
 
@@ -16,7 +27,8 @@ make
 ### Qt5
 
 ```
-sudo pacman -S qt5-x11extras
-cmake -DUSE_QT5=ON ..
+mkdir build
+cd build
+cmake ..
 make
 ```

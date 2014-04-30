@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(qtpanel)
 find_package(X11 REQUIRED)
-option(USE_QT5 "Build against Qt5 instead of Qt4." OFF)
+option(USE_QT5 "Build against Qt5 instead of Qt4." ON)
 if(USE_QT5)
     message(STATUS "Use Qt5")
     find_package(Qt5Core REQUIRED)

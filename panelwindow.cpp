@@ -1,4 +1,6 @@
-#include "panelwindow.h"
+/*                                                                              
+ * Copyright (C) 2014 Leslie Zhai <xiang.zhai@i-soft.com.cn>
+ */
 
 #include <QtGui/QResizeEvent>
 #if QT_VERSION >= 0x050000
@@ -16,11 +18,11 @@
 #include <QtGui/QGraphicsView>
 #include <QtGui/QMenu>
 #endif
-#include "dockapplet.h"
 
+#include "panelwindow.h"
+#include "dockapplet.h"
 #include "dpisupport.h"
 #include "panelapplication.h"
-
 #include "applicationsmenuapplet.h"
 #include "trayapplet.h"
 #include "clockapplet.h"
@@ -135,9 +137,13 @@ void PanelWindow::setDockMode(bool dockMode)
 {
 	m_dockMode = dockMode;
 
-	setAttribute(Qt::WA_X11NetWmWindowTypeDock, m_dockMode);
+	// FIXME: no DOCK effect for Qt5?
+    setAttribute(Qt::WA_X11NetWmWindowTypeDock, m_dockMode);
+#if QT_VERSION >= 0x050000
+    setWindowFlags(Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
+#endif
 
-	if(!m_dockMode)
+	if (!m_dockMode)
 	{
 		// No need to reserve space anymore.
 		X11Support::removeWindowProperty(winId(), "_NET_WM_STRUT");

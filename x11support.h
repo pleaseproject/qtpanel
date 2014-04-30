@@ -15,6 +15,7 @@
 #include <QtGui/QImage>                                                            
 #endif
 
+// TODO: Keep all the X11 stuff with scary defines below normal headers.
 #include <X11/Xlib.h>
 
 class X11Support: public QObject
