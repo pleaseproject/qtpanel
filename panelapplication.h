@@ -34,10 +34,7 @@ public:
     virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *) Q_DECL_OVERRIDE
     {                                                                              
         xcb_generic_event_t *ev = static_cast<xcb_generic_event_t *>(message);
-        //qDebug() << "DEBUG: " << __PRETTY_FUNCTION__ << eventType << message << ev;
-        // FIXME: convert xcb_generic_event_t directly to XEvent
-        // google with Qt5 XEvent to see other projects (such as KWin) HOWTO fix it
-        if (m_x11support) m_x11support->onX11Event(NULL); 
+        if (m_x11support) m_x11support->onX11Event(ev); 
         return false;                                                              
     }
 

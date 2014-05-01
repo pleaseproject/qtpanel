@@ -568,7 +568,7 @@ void DockApplet::updateActiveWindow()
 
 void DockApplet::windowPropertyChanged(unsigned long window, unsigned long atom)
 {
-    // FIXME: tempoarary Qt5 style...
+    // FIXME: be familiar with xcb
 #if QT_VERSION >= 0x050000
     updateClientList();
 #else

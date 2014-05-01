@@ -33,12 +33,16 @@ X11Support::~X11Support()
 	m_instance = NULL;
 }
 
+// TODO: be familiar with xcb
+#if QT_VERSION >= 0x050000
+void X11Support::onX11Event(xcb_generic_event_t *event) 
+{
+    emit windowPropertyChanged(NULL, NULL);
+}
+#endif
+
 void X11Support::onX11Event(XEvent* event)
 {
-    // FIXME: temporary Qt5 style...
-#if QT_VERSION >= 0x050000
-    emit windowPropertyChanged(NULL, NULL);
-#else
     if (event->type == m_damageEventBase + XDamageNotify)
 	{
 		// Repair damaged area.
@@ -55,7 +59,6 @@ void X11Support::onX11Event(XEvent* event)
 		emit windowPropertyChanged(event->xproperty.window, event->xproperty.atom);
 	if(event->type == ClientMessage)
 		emit clientMessageReceived(event->xclient.window, event->xclient.message_type, event->xclient.data.b);
-#endif
 }
 
 unsigned long X11Support::rootWindow()

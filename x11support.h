@@ -9,6 +9,7 @@
 #if QT_VERSION >= 0x050000                                                         
 #include <QApplication>                                                            
 #include <QX11Info>                                                                
+#include <xcb/xcb.h>
 #else                                                                              
 #include <QtGui/QApplication>                                                      
 #include <QtGui/QX11Info>                                                          
@@ -25,6 +26,9 @@ public:
 	X11Support();
 	~X11Support();
 
+#if QT_VERSION >= 0x050000
+    void onX11Event(xcb_generic_event_t *event);
+#endif
 	void onX11Event(XEvent* event);
 
 	static X11Support* instance()
