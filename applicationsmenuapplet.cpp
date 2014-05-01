@@ -77,6 +77,7 @@ ApplicationsMenuApplet::ApplicationsMenuApplet(PanelWindow* panelWindow)
 	m_textItem->setColor(Qt::white);
 	m_textItem->setFont(m_panelWindow->font());
 	m_textItem->setText("Applications");
+    m_textItem->setImage(QImage("/usr/share/icons/oxygen/22x22/apps/oslogo.png"));
 }
 
 ApplicationsMenuApplet::~ApplicationsMenuApplet()
@@ -123,7 +124,9 @@ void ApplicationsMenuApplet::clicked()
 
 void ApplicationsMenuApplet::layoutChanged()
 {
-	m_textItem->setPos(8, m_panelWindow->textBaseLine());
+    // TODO: it does not need to act like anchors
+    //m_textItem->setPos(8, m_panelWindow->textBaseLine());
+    m_textItem->setPos(8, (m_panelWindow->height() - 22) / 2);
 }
 
 bool ApplicationsMenuApplet::isHighlighted()

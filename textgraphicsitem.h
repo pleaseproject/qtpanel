@@ -18,6 +18,7 @@ public:
 	void setColor(const QColor& color);
 	void setFont(const QFont& font);
 	void setText(const QString& text);
+    void setImage(const QImage& image);
 
 	const QFont& font() const
 	{
@@ -31,6 +32,7 @@ private:
 	QColor m_color;
 	QFont m_font;
 	QString m_text;
+    QImage m_image;
 };
 
 #endif

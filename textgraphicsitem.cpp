@@ -30,17 +30,30 @@ void TextGraphicsItem::setText(const QString& text)
 	update(boundingRect());
 }
 
+void TextGraphicsItem::setImage(const QImage& image) 
+{
+    m_image = image;
+    update(boundingRect());
+}
+
 QRectF TextGraphicsItem::boundingRect() const
 {
-	QFontMetrics metrics(m_font);
+	if (!m_image.isNull()) {
+        return m_image.rect();
+    }
+    QFontMetrics metrics(m_font);
 	return metrics.boundingRect(m_text);
 }
 
 void TextGraphicsItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-	painter->setFont(m_font);
-	painter->setPen(QPen(Qt::black));
-	painter->drawText(1, 1, m_text);
-	painter->setPen(QPen(m_color));
-	painter->drawText(0, 0, m_text);
+	if (m_image.isNull()) {
+        painter->setFont(m_font);
+	    painter->setPen(QPen(Qt::black));
+	    painter->drawText(1, 1, m_text);
+	    painter->setPen(QPen(m_color));
+	    painter->drawText(0, 0, m_text);
+    } else {
+        painter->drawImage(0, 0, m_image);
+    }
 }

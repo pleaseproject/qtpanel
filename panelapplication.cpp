@@ -30,10 +30,8 @@ PanelApplication::~PanelApplication()
 	m_instance = NULL;
 }
 
-// FIXME: there is no x11EventFilter any more for Qt5?
 bool PanelApplication::x11EventFilter(XEvent* event)
 {
-	qDebug() << "DEBUG: " << __PRETTY_FUNCTION__;
     m_x11support->onX11Event(event);
 	return false;
 }
