@@ -33,11 +33,35 @@ X11Support::~X11Support()
 	m_instance = NULL;
 }
 
-// TODO: be familiar with xcb
 #if QT_VERSION >= 0x050000
 void X11Support::onX11Event(xcb_generic_event_t *event) 
 {
-    emit windowPropertyChanged(NULL, NULL);
+    switch (event->response_type & ~0x80) {
+    // FIXME: there is no XDamageNotify in xcb?
+    // case XCB_DAMAGE_NOTIFY: break;
+    case XCB_DESTROY_NOTIFY: {
+        xcb_destroy_notify_event_t *destroy = reinterpret_cast<xcb_destroy_notify_event_t *>(event);
+        emit windowClosed(destroy->window);
+        break;
+    }
+    case XCB_CONFIGURE_NOTIFY: {
+        xcb_configure_notify_event_t *configure = reinterpret_cast<xcb_configure_notify_event_t *>(event);
+        emit windowReconfigured(configure->window, configure->x, configure->y, 
+            configure->width, configure->height);
+        break;
+    }
+    case XCB_PROPERTY_NOTIFY: {
+        xcb_property_notify_event_t *property = reinterpret_cast<xcb_property_notify_event_t*>(event);
+        emit windowPropertyChanged(property->window, property->atom);
+        break;
+    }
+    case XCB_CLIENT_MESSAGE: {
+        xcb_client_message_event_t *client = reinterpret_cast<xcb_client_message_event_t *>(event);
+        emit clientMessageReceived(client->window, client->type, client->data.data8);
+        break;
+    }
+    default: break;
+    }
 }
 #endif
 
@@ -51,14 +75,14 @@ void X11Support::onX11Event(XEvent* event)
 
 		emit windowDamaged(event->xany.window);
 	}
-	if(event->type == DestroyNotify)
+	if (event->type == DestroyNotify)
 		emit windowClosed(event->xdestroywindow.window);
-	if(event->type == ConfigureNotify)
+	if (event->type == ConfigureNotify)
 		emit windowReconfigured(event->xconfigure.window, event->xconfigure.x, event->xconfigure.y, event->xconfigure.width, event->xconfigure.height);
 	if (event->type == PropertyNotify)
 		emit windowPropertyChanged(event->xproperty.window, event->xproperty.atom);
-	if(event->type == ClientMessage)
-		emit clientMessageReceived(event->xclient.window, event->xclient.message_type, event->xclient.data.b);
+	if (event->type == ClientMessage) 
+        emit clientMessageReceived(event->xclient.window, event->xclient.message_type, event->xclient.data.b);
 }
 
 unsigned long X11Support::rootWindow()
@@ -275,7 +299,8 @@ void X11Support::activateWindow(unsigned long window)
 
 void X11Support::minimizeWindow(unsigned long window)
 {
-	XIconifyWindow(QX11Info::display(), window, QX11Info::appScreen());
+	qDebug() << "DEBUG: " << __PRETTY_FUNCTION__ << window;
+    XIconifyWindow(QX11Info::display(), window, QX11Info::appScreen());
 }
 
 void X11Support::closeWindow(unsigned long window)

@@ -144,10 +144,7 @@ public:
 
 	void updateLayout();
 
-	unsigned long activeWindow() const
-	{
-		return m_activeWindow;
-	}
+	unsigned long activeWindow() const { return m_activeWindow; }
 
 	void draggingStarted();
 	void draggingStopped();

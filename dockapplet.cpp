@@ -241,9 +241,11 @@ void DockItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 
 			if((event->scenePos() - m_mouseDownPosition).manhattanLength() < clickMouseMoveTolerance)
 			{
-				if(m_dockApplet->activeWindow() == m_clients[0]->handle())
-					X11Support::minimizeWindow(m_clients[0]->handle());
-				else
+				qDebug() << "DEBUG: " << __PRETTY_FUNCTION__ << 
+                    m_dockApplet->activeWindow();
+                if (m_dockApplet->activeWindow() == m_clients[0]->handle()) 
+                    X11Support::minimizeWindow(m_clients[0]->handle());
+                else 
 					X11Support::activateWindow(m_clients[0]->handle());
 			}
 		}
@@ -563,26 +565,21 @@ void DockApplet::updateClientList()
 
 void DockApplet::updateActiveWindow()
 {
-	m_activeWindow = X11Support::getWindowPropertyWindow(X11Support::rootWindow(), "_NET_ACTIVE_WINDOW");
+    m_activeWindow = X11Support::getWindowPropertyWindow(X11Support::rootWindow(), "_NET_ACTIVE_WINDOW");
 }
 
 void DockApplet::windowPropertyChanged(unsigned long window, unsigned long atom)
 {
-    // FIXME: be familiar with xcb
-#if QT_VERSION >= 0x050000
-    updateClientList();
-#else
     if (window == X11Support::rootWindow()) {
         if (atom == X11Support::atom("_NET_CLIENT_LIST")) 
-			updateClientList();
+            updateClientList();
 
-		if(atom == X11Support::atom("_NET_ACTIVE_WINDOW"))
-			updateActiveWindow();
+		if(atom == X11Support::atom("_NET_ACTIVE_WINDOW")) 
+            updateActiveWindow();
 
 		return;
 	}
-
-	if (m_clients.contains(window))
+	
+    if (m_clients.contains(window))
 		m_clients[window]->windowPropertyChanged(atom);
-#endif
 }
