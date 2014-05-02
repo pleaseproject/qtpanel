@@ -22,7 +22,8 @@
 #include "dpisupport.h"
 
 DockItem::DockItem(DockApplet* dockApplet)
-	: m_dragging(false), m_highlightIntensity(0.0), m_urgencyHighlightIntensity(0.0)
+  : m_dragging(false), m_highlightIntensity(0.0), 
+    m_urgencyHighlightIntensity(0.0), m_isMinimized(false) 
 {
 	m_dockApplet = dockApplet;
 
@@ -222,37 +223,41 @@ void DockItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 
 void DockItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
-	if(event->button() == Qt::LeftButton)
-	{
+	if (event->button() == Qt::LeftButton) {
 		m_dragging = false;
 		m_dockApplet->draggingStopped();
 		setZValue(0.0); // No more on top.
 		startAnimation(); // Item can be out of it's regular, start animation to bring it back.
 	}
 
-	if(isUnderMouse())
-	{
-		if(m_clients.isEmpty())
-			return;
+	if (isUnderMouse()) {
+		if (m_clients.isEmpty()) return;
 
-		if(event->button() == Qt::LeftButton)
-		{
+		if (event->button() == Qt::LeftButton) {
 			static const qreal clickMouseMoveTolerance = 10.0;
 
-			if((event->scenePos() - m_mouseDownPosition).manhattanLength() < clickMouseMoveTolerance)
-			{
-				qDebug() << "DEBUG: " << __PRETTY_FUNCTION__ << 
-                    m_dockApplet->activeWindow();
-                if (m_dockApplet->activeWindow() == m_clients[0]->handle()) 
+			if ((event->scenePos() - m_mouseDownPosition).manhattanLength() < 
+                clickMouseMoveTolerance) {
+                if (m_dockApplet->activeWindow() == m_clients[0]->handle()) {
+#if QT_VERSION >= 0x050000
+                    if (m_isMinimized) {
+                        X11Support::activateWindow(m_clients[0]->handle());
+                        m_isMinimized = false;
+                    } else {
+                        X11Support::minimizeWindow(m_clients[0]->handle());
+                        m_isMinimized = true;
+                    }
+#else
                     X11Support::minimizeWindow(m_clients[0]->handle());
-                else 
+#endif
+                } else 
 					X11Support::activateWindow(m_clients[0]->handle());
 			}
 		}
 
-		if(event->button() == Qt::RightButton && !m_dragging)
-		{
-			QMenu menu;
+		if (event->button() == Qt::RightButton && !m_dragging) {
+			// TODO: it can be added "Add to Dock" ... sort of items
+            QMenu menu;
 			menu.addAction(QIcon::fromTheme("window-close"), "Close", this, SLOT(close()));
 			menu.exec(event->screenPos());
 		}
@@ -506,7 +511,6 @@ QSize DockApplet::desiredSize()
 void DockApplet::registerDockItem(DockItem* dockItem)
 {
 	m_dockItems.append(dockItem);
-	//qDebug() << "DEBUG: " << __PRETTY_FUNCTION__ <<  m_dockItems.size();
     updateLayout();
 	dockItem->moveInstantly();
 }
@@ -525,47 +529,43 @@ DockItem* DockApplet::dockItemForClient(Client* client)
 
 void DockApplet::updateClientList()
 {
-	if(m_dragging)
-		return; // Don't want new dock items to appear (or old to be removed) while rearranging them with drag and drop.
+	if (m_dragging) return; 
 
-	QVector<unsigned long> windows = X11Support::getWindowPropertyWindowsArray(X11Support::rootWindow(), "_NET_CLIENT_LIST");
+	QVector<unsigned long> windows = X11Support::getWindowPropertyWindowsArray(
+        X11Support::rootWindow(), "_NET_CLIENT_LIST");
 
 	// Handle new clients.
-	for(int i = 0; i < windows.size(); i++)
-	{
-		if(!m_clients.contains(windows[i]))
-		{
+	for (int i = 0; i < windows.size(); i++) {
+		if (!m_clients.contains(windows[i])) {
 			// Skip our own windows.
-			if(QWidget::find(windows[i]) != NULL)
-				continue;
+			if (QWidget::find(windows[i]) != NULL) 
+                continue;
 
 			m_clients[windows[i]] = new Client(this, windows[i]);
 		}
 	}
 
 	// Handle removed clients.
-	for(;;)
-	{
+	for (;;) {
 		bool clientRemoved = false;
-		foreach(Client* client, m_clients)
-		{
+		foreach(Client* client, m_clients) {
 			int handle = client->handle();
-			if(!windows.contains(handle))
-			{
+			if (!windows.contains(handle)) {
 				delete m_clients[handle];
 				m_clients.remove(handle);
 				clientRemoved = true;
 				break;
 			}
 		}
-		if(!clientRemoved)
-			break;
+		if (!clientRemoved) break;
 	}
 }
 
 void DockApplet::updateActiveWindow()
 {
-    m_activeWindow = X11Support::getWindowPropertyWindow(X11Support::rootWindow(), "_NET_ACTIVE_WINDOW");
+    unsigned long activeWindow = X11Support::getWindowPropertyWindow(
+        X11Support::rootWindow(), "_NET_ACTIVE_WINDOW");
+    if (activeWindow) m_activeWindow = activeWindow;
 }
 
 void DockApplet::windowPropertyChanged(unsigned long window, unsigned long atom)

@@ -20,10 +20,7 @@ public:
 	void setText(const QString& text);
     void setImage(const QImage& image);
 
-	const QFont& font() const
-	{
-		return m_font;
-	}
+	const QFont& font() const { return m_font; }
 
 	QRectF boundingRect() const;
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);

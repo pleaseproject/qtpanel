@@ -140,7 +140,7 @@ void PanelWindow::setDockMode(bool dockMode)
 	// FIXME: no DOCK effect for Qt5?
     setAttribute(Qt::WA_X11NetWmWindowTypeDock, m_dockMode);
 #if QT_VERSION >= 0x050000
-    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::BypassWindowManagerHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 #endif
 
 	if (!m_dockMode)

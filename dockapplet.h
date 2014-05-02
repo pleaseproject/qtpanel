@@ -75,6 +75,7 @@ private:
 	bool m_dragging;
 	QPointF m_mouseDownPosition;
 	QPoint m_dragStartPosition;
+    bool m_isMinimized;
 };
 
 // Used for tracking connected windows (X11 clients).

@@ -144,12 +144,13 @@ unsigned long X11Support::getWindowPropertyCardinal(unsigned long window, const 
 	return value;
 }
 
+// FIXME: it failed to get activateWindow for Qt5
 unsigned long X11Support::getWindowPropertyWindow(unsigned long window, const QString& name)
 {
 	int numItems;
-	unsigned long* data;
+	unsigned long *data;
 	unsigned long value = 0;
-	if(!getWindowPropertyHelper(window, atom(name), XA_WINDOW, numItems, data))
+	if (!getWindowPropertyHelper(window, atom(name), XA_WINDOW, numItems, data))
 		return value;
 	value = data[0];
 	XFree(data);
@@ -299,7 +300,6 @@ void X11Support::activateWindow(unsigned long window)
 
 void X11Support::minimizeWindow(unsigned long window)
 {
-	qDebug() << "DEBUG: " << __PRETTY_FUNCTION__ << window;
     XIconifyWindow(QX11Info::display(), window, QX11Info::appScreen());
 }
 
