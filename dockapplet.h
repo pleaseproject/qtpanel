@@ -1,3 +1,5 @@
+/* Copyright (C) 2014 Leslie Zhai <xiang.zhai@i-soft.com.cn> */
+
 #ifndef DOCKAPPLET_H
 #define DOCKAPPLET_H
 

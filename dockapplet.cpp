@@ -1,3 +1,5 @@
+/* Copyright (C) 2014 Leslie Zhai <xiang.zhai@i-soft.com.cn> */
+
 #include <QtCore/QDateTime>
 #include <QtCore/QTimer>
 #include <QtGui/QPainter>

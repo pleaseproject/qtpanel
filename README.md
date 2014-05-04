@@ -8,6 +8,13 @@ Migrated qtpanel to Qt5 by Leslie Zhai <xiang.zhai@i-soft.com.cn>
 
 ## Build
 
+### Dependence for AnthonOS
+
+```
+sudo apt-get install qt-5
+```
+
+
 ### Dependence for iSoftLinux, ArchLinux
 
 ```

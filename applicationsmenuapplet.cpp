@@ -1,3 +1,5 @@
+/* Copyright (C) 2014 Leslie Zhai <xiang.zhai@i-soft.com.cn> */
+
 #include "applicationsmenuapplet.h"
 
 #if QT_VERSION >= 0x050000
@@ -78,7 +80,7 @@ ApplicationsMenuApplet::ApplicationsMenuApplet(PanelWindow* panelWindow)
 	m_textItem->setFont(m_panelWindow->font());
 	m_textItem->setText("Applications");
     // TODO: add oslogo to act like M$_WIN
-    m_textItem->setImage(QImage("/usr/share/icons/oxygen/22x22/apps/oslogo.png"));
+    m_textItem->setImage(QImage("/usr/share/icons/default.kde4/22x22/apps/kde.png"));
 }
 
 ApplicationsMenuApplet::~ApplicationsMenuApplet()

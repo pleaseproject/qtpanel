@@ -1,3 +1,5 @@
+/* Copyright (C) 2014 Leslie Zhai <xiang.zhai@i-soft.com.cn> */
+
 #ifndef X11SUPPORT_H
 #define X11SUPPORT_H
 

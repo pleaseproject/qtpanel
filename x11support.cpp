@@ -1,3 +1,5 @@
+/* Copyright (C) 2014 Leslie Zhai <xiang.zhai@i-soft.com.cn> */
+
 #include <QDebug>
 
 #include "x11support.h"
@@ -12,8 +14,7 @@ static XErrorHandler oldX11ErrorHandler = NULL;
 
 static int x11errorHandler(Display* display, XErrorEvent* error)
 {
-	if(error->error_code == BadWindow)
-		return 0; // This usually happens when querying property on a window that's already gone. That's OK.
+	if (error->error_code == BadWindow) return 0;
 
 	return (*oldX11ErrorHandler)(display, error);
 }

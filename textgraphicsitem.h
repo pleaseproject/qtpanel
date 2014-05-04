@@ -1,3 +1,5 @@
+/* Copyright (C) 2014 Leslie Zhai <xiang.zhai@i-soft.com.cn> */
+
 #ifndef TEXTGRAPHICSITEM_H
 #define TEXTGRAPHICSITEM_H
 
