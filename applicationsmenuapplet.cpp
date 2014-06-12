@@ -79,8 +79,10 @@ ApplicationsMenuApplet::ApplicationsMenuApplet(PanelWindow* panelWindow)
 	m_textItem->setColor(Qt::white);
 	m_textItem->setFont(m_panelWindow->font());
 	m_textItem->setText("Applications");
+#if QT_VERSION >= 0x050000
     // TODO: add oslogo to act like M$_WIN
-    m_textItem->setImage(QImage("/usr/share/icons/default.kde4/22x22/apps/kde.png"));
+    m_textItem->setImage(QImage("/usr/share/icons/hicolor/22x22/apps/Qt"));
+#endif
 }
 
 ApplicationsMenuApplet::~ApplicationsMenuApplet()
@@ -110,7 +112,13 @@ bool ApplicationsMenuApplet::init()
 
 QSize ApplicationsMenuApplet::desiredSize()
 {
-	return QSize(m_textItem->boundingRect().size().width() + 16, m_textItem->boundingRect().size().height());
+#if QT_VERSION >= 0x050000
+    return QSize(m_textItem->boundingRect().size().width() + 16, 
+                 m_textItem->boundingRect().size().height());
+#else
+    return QSize(m_textItem->boundingRect().size().width(), 
+                 m_textItem->boundingRect().size().height());
+#endif
 }
 
 void ApplicationsMenuApplet::clicked()
@@ -127,10 +135,12 @@ void ApplicationsMenuApplet::clicked()
 
 void ApplicationsMenuApplet::layoutChanged()
 {
-    // TODO: remove ugly Applications TextGraphicsItem
-    //m_textItem->setPos(8, m_panelWindow->textBaseLine());
-    m_textItem->setPos(
-        8, (m_panelWindow->height() - m_textItem->boundingRect().height()) / 2);
+#if QT_VERSION >= 0x050000
+    m_textItem->setPos(8, 
+        (m_panelWindow->height() - m_textItem->boundingRect().height()) / 2);
+#else
+    m_textItem->setPos(8, m_panelWindow->textBaseLine());
+#endif
 }
 
 bool ApplicationsMenuApplet::isHighlighted()
